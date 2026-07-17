@@ -85,6 +85,10 @@ export default function RelationshipApp({ user }: { user: AuthUser | null }) {
 
   const latestResult = results[0] ?? null;
   const partnerInsight = couple?.partnerResults?.[0] ?? null;
+  const resolvedPartnerName = couple?.partnerName?.trim() || partnerInsight?.ownerName?.trim();
+  const partnerName = !resolvedPartnerName || resolvedPartnerName.toLowerCase() === "your partner" ? "your partner" : resolvedPartnerName.slice(0, 1).toUpperCase() + resolvedPartnerName.slice(1);
+  const partnerPossessive = partnerName + "’s";
+  const partnerInitial = partnerName === "your partner" ? "♡" : partnerName.slice(0, 1).toUpperCase();
 
   function beginQuiz(quiz: Quiz) {
     setActiveQuiz(quiz);
@@ -338,12 +342,12 @@ export default function RelationshipApp({ user }: { user: AuthUser | null }) {
           </article>
 
           <article className="partner-card">
-            <div className="partner-card-head"><div><p className="card-kicker">From your partner’s care map</p><h3>{partnerInsight?.profileTitle ?? "Waiting for their first result"}</h3></div><span className="heart-seal">♡</span></div>
+            <div className="partner-card-head"><div><p className="card-kicker">From {partnerPossessive} care map</p><h3>{partnerInsight?.profileTitle ?? "Waiting for their first result"}</h3></div><span className="partner-seal" aria-hidden="true">{partnerInitial}</span></div>
             {partnerInsight ? (
               <>
                 <p>{partnerInsight.summary}</p>
                 <div className="partner-tip"><span>For you to try</span>{partnerInsight.care[0]}</div>
-                <button className="text-button" type="button" onClick={() => setShowPartnerCareMap(true)}>See their care map <span>→</span></button>
+                <button className="text-button" type="button" onClick={() => setShowPartnerCareMap(true)}>See {partnerPossessive} care map <span>→</span></button>
               </>
             ) : (
               <>
@@ -402,15 +406,16 @@ export default function RelationshipApp({ user }: { user: AuthUser | null }) {
       )}
 
       {showPartnerCareMap && partnerInsight && (
-        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Partner care map">
+        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label={partnerPossessive + " care map"}>
           <div className="partner-care-modal">
-            <button className="modal-close" type="button" onClick={() => setShowPartnerCareMap(false)} aria-label="Close partner care map">{"\u00d7"}</button>
-            <p className="modal-kicker">Their care map</p>
-            <h2>{partnerInsight.profileTitle}</h2>
-            <p className="partner-care-owner">{couple?.partnerName ?? partnerInsight.ownerName ?? "Your partner"}</p>
+            <button className="modal-close" type="button" onClick={() => setShowPartnerCareMap(false)} aria-label={"Close " + partnerPossessive + " care map"}>{"\u00d7"}</button>
+            <div className="partner-care-heading">
+              <span className="partner-care-avatar" aria-hidden="true">{partnerInitial}</span>
+              <div><p className="modal-kicker">{partnerPossessive} care map</p><h2>{partnerInsight.profileTitle}</h2></div>
+            </div>
             <p className="partner-care-summary">{partnerInsight.summary}</p>
             <div className="result-care">
-              <h3>Ways to care for them</h3>
+              <h3>Ways to care for {partnerName}</h3>
               {partnerInsight.care.map((tip) => <div key={tip}><span>{"\u2713"}</span>{tip}</div>)}
             </div>
           </div>
