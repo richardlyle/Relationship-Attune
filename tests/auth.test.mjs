@@ -99,3 +99,13 @@ test("uses the Relatune brand in primary metadata and navigation", async () => {
   assert.match(login, /Relatune/);
   assert.doesNotMatch(`${layout}\n${app}\n${login}`, /Between Us/);
 });
+
+test("opens the full partner care map from the partner card", async () => {
+  const app = await read("app/components/RelationshipApp.tsx");
+
+  assert.match(app, /onClick=\{\(\) => setShowPartnerCareMap\(true\)\}/);
+  assert.match(app, /setShowPartnerCareMap\(true\)/);
+  assert.match(app, /Close partner care map/);
+  assert.match(app, /Ways to care for them/);
+  assert.match(app, /partnerInsight\.care\.map/);
+});
