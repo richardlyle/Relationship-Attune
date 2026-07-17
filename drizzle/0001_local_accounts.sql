@@ -4,7 +4,7 @@ CREATE TABLE `accounts` (
   `display_name` text NOT NULL,
   `password_hash` text NOT NULL,
   `password_salt` text NOT NULL,
-  `password_iterations` integer DEFAULT 600000 NOT NULL,
+  `password_iterations` integer DEFAULT 100000 NOT NULL,
   `failed_attempts` integer DEFAULT 0 NOT NULL,
   `locked_until` text,
   `created_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL,

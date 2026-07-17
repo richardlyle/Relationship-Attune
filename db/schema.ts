@@ -13,7 +13,7 @@ export const accounts = sqliteTable("accounts", {
   unsubscribeTokenHash: text("unsubscribe_token_hash"),
   passwordHash: text("password_hash").notNull(),
   passwordSalt: text("password_salt").notNull(),
-  passwordIterations: integer("password_iterations").notNull().default(600000),
+  passwordIterations: integer("password_iterations").notNull().default(100000),
   failedAttempts: integer("failed_attempts").notNull().default(0),
   lockedUntil: text("locked_until"),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
