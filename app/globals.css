@@ -188,7 +188,7 @@ h1 em, .care-copy h2 em { color: var(--rose); font-weight: 500; }
 .partner-card { background: var(--plum); color: #fff; }
 .partner-card-head { display: flex; justify-content: space-between; gap: 20px; }
 .partner-card .card-kicker { color: #e8b8bf; }
-.heart-seal { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.09); font-family: Georgia, serif; font-size: 22px; }
+.partner-seal { flex: 0 0 auto; width: 50px; height: 50px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.15); border-radius: 50%; background: rgba(255,255,255,.09); font-family: Georgia, serif; font-size: 22px; font-weight: 600; text-transform: uppercase; }
 .partner-card > p { color: rgba(255,255,255,.67); }
 .partner-tip { background: rgba(255,255,255,.08); border-left: 2px solid #dca5ad; padding: 17px 18px; border-radius: 0 13px 13px 0; font-family: Georgia, serif; line-height: 1.55; }
 .partner-tip span { display: block; font-family: Inter, sans-serif; text-transform: uppercase; letter-spacing: .12em; font-size: 8px; color: #e8b8bf; font-weight: 800; margin-bottom: 7px; }
@@ -206,8 +206,10 @@ footer .disclaimer { text-align: right; max-width: 350px; justify-self: end; }
 .quiz-modal .modal-kicker, .pair-modal .modal-kicker, .partner-care-modal .modal-kicker { margin-bottom: 14px; }
 .quiz-modal > h2, .pair-modal h2, .partner-care-modal h2, .result-view h2 { font-family: Georgia, serif; font-weight: 500; font-size: clamp(34px, 5vw, 49px); line-height: 1.08; letter-spacing: -.03em; margin-bottom: 30px; }
 .partner-care-modal { width: min(640px, 100%); }
-.partner-care-modal h2 { margin-right: 42px; margin-bottom: 16px; }
-.partner-care-owner { color: var(--rose); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 18px; }
+.partner-care-heading { display: flex; align-items: flex-start; gap: 16px; padding-right: 42px; margin-bottom: 22px; }
+.partner-care-avatar { flex: 0 0 auto; width: 54px; height: 54px; display: grid; place-items: center; border-radius: 50%; background: var(--plum); color: #fff; font-family: Georgia, serif; font-size: 23px; font-weight: 600; text-transform: uppercase; box-shadow: 0 8px 22px rgba(74,45,62,.18); }
+.partner-care-heading .modal-kicker { margin: 3px 0 6px; }
+.partner-care-heading h2 { margin: 0; }
 .partner-care-summary { color: var(--muted); line-height: 1.65; margin-bottom: 24px; }
 .answer-list { display: grid; gap: 10px; }
 .answer-list button { width: 100%; min-height: 64px; display: flex; justify-content: space-between; align-items: center; text-align: left; background: #fff; border: 1px solid var(--line); padding: 16px 18px; border-radius: 14px; cursor: pointer; transition: border .2s, transform .2s, background .2s; }
@@ -329,6 +331,8 @@ footer .disclaimer { text-align: right; max-width: 350px; justify-self: end; }
   .connect-card, .partner-card { padding: 27px; }
   .quiz-modal, .pair-modal, .partner-care-modal { padding: 34px 22px 25px; border-radius: 22px; }
   .quiz-modal > h2, .pair-modal h2, .partner-care-modal h2, .result-view h2 { font-size: 34px; }
+  .partner-care-heading { gap: 12px; padding-right: 32px; }
+  .partner-care-avatar { width: 46px; height: 46px; font-size: 20px; }
   .result-actions { flex-direction: column; }
   .modal-backdrop { padding: 12px; align-items: start; }
   .auth-page { padding: 24px 15px 45px; }
