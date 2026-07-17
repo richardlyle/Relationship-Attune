@@ -1,0 +1,27 @@
+name: Finish source upload
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - between-us-personality-source.zip
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Expand source and commit
+        shell: bash
+        run: |
+          unzip -o between-us-personality-source.zip
+          rm between-us-personality-source.zip
+          rm .github/workflows/unpack-source.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Upload complete Between Us website source"
+          git push
