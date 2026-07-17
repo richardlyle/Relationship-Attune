@@ -58,6 +58,7 @@ export default function RelationshipApp({ user }: { user: AuthUser | null }) {
   const [pairMessage, setPairMessage] = useState("");
   const [loadingPair, setLoadingPair] = useState(false);
   const [filter, setFilter] = useState("All");
+  const [showPartnerCareMap, setShowPartnerCareMap] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -342,7 +343,7 @@ export default function RelationshipApp({ user }: { user: AuthUser | null }) {
               <>
                 <p>{partnerInsight.summary}</p>
                 <div className="partner-tip"><span>For you to try</span>{partnerInsight.care[0]}</div>
-                <button className="text-button">See their care map <span>→</span></button>
+                <button className="text-button" type="button" onClick={() => setShowPartnerCareMap(true)}>See their care map <span>→</span></button>
               </>
             ) : (
               <>
@@ -396,6 +397,22 @@ export default function RelationshipApp({ user }: { user: AuthUser | null }) {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {showPartnerCareMap && partnerInsight && (
+        <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Partner care map">
+          <div className="partner-care-modal">
+            <button className="modal-close" type="button" onClick={() => setShowPartnerCareMap(false)} aria-label="Close partner care map">{"\u00d7"}</button>
+            <p className="modal-kicker">Their care map</p>
+            <h2>{partnerInsight.profileTitle}</h2>
+            <p className="partner-care-owner">{couple?.partnerName ?? partnerInsight.ownerName ?? "Your partner"}</p>
+            <p className="partner-care-summary">{partnerInsight.summary}</p>
+            <div className="result-care">
+              <h3>Ways to care for them</h3>
+              {partnerInsight.care.map((tip) => <div key={tip}><span>{"\u2713"}</span>{tip}</div>)}
+            </div>
           </div>
         </div>
       )}
