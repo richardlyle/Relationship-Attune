@@ -9,10 +9,11 @@ async function read(path) {
 }
 
 test("uses application-owned username and password authentication", async () => {
-  const [auth, login, register, form, home] = await Promise.all([
+  const [auth, login, register, logout, form, home] = await Promise.all([
     read("app/auth.ts"),
     read("app/api/auth/login/route.ts"),
     read("app/api/auth/register/route.ts"),
+    read("app/api/auth/logout/route.ts"),
     read("app/login/AuthForm.tsx"),
     read("app/page.tsx"),
   ]);
@@ -25,6 +26,9 @@ test("uses application-owned username and password authentication", async () => 
   assert.match(auth, /crypto\.getRandomValues/);
   assert.match(login, /MAX_FAILED_ATTEMPTS = 8/);
   assert.match(register, /validUsername/);
+  assert.match(logout, /new Response\(null/);
+  assert.match(logout, /status: 303/);
+  assert.doesNotMatch(logout, /Response\.redirect/);
   assert.match(form, /Create account/);
   assert.match(form, /type="password"/);
   assert.match(home, /getCurrentUser/);
