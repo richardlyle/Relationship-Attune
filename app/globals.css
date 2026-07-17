@@ -199,12 +199,16 @@ footer { width: min(1180px, calc(100% - 48px)); margin: 0 auto; padding: 45px 0 
 footer .disclaimer { text-align: right; max-width: 350px; justify-self: end; }
 
 .modal-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(41,31,40,.68); backdrop-filter: blur(8px); display: grid; place-items: center; padding: 24px; overflow-y: auto; }
-.quiz-modal, .pair-modal { width: min(680px, 100%); background: var(--paper); border-radius: 27px; padding: 42px; position: relative; box-shadow: 0 35px 90px rgba(20,14,19,.35); animation: rise .28s ease-out; }
+.quiz-modal, .pair-modal, .partner-care-modal { width: min(680px, 100%); background: var(--paper); border-radius: 27px; padding: 42px; position: relative; box-shadow: 0 35px 90px rgba(20,14,19,.35); animation: rise .28s ease-out; }
 .modal-close { position: absolute; right: 20px; top: 18px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--cream); cursor: pointer; font-size: 21px; color: var(--muted); }
 .quiz-progress { height: 5px; border-radius: 999px; background: #eee7e3; overflow: hidden; margin: 0 45px 36px 0; }
 .quiz-progress span { display: block; height: 100%; background: var(--rose); border-radius: inherit; transition: width .3s ease; }
-.quiz-modal .modal-kicker, .pair-modal .modal-kicker { margin-bottom: 14px; }
-.quiz-modal > h2, .pair-modal h2, .result-view h2 { font-family: Georgia, serif; font-weight: 500; font-size: clamp(34px, 5vw, 49px); line-height: 1.08; letter-spacing: -.03em; margin-bottom: 30px; }
+.quiz-modal .modal-kicker, .pair-modal .modal-kicker, .partner-care-modal .modal-kicker { margin-bottom: 14px; }
+.quiz-modal > h2, .pair-modal h2, .partner-care-modal h2, .result-view h2 { font-family: Georgia, serif; font-weight: 500; font-size: clamp(34px, 5vw, 49px); line-height: 1.08; letter-spacing: -.03em; margin-bottom: 30px; }
+.partner-care-modal { width: min(640px, 100%); }
+.partner-care-modal h2 { margin-right: 42px; margin-bottom: 16px; }
+.partner-care-owner { color: var(--rose); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 18px; }
+.partner-care-summary { color: var(--muted); line-height: 1.65; margin-bottom: 24px; }
 .answer-list { display: grid; gap: 10px; }
 .answer-list button { width: 100%; min-height: 64px; display: flex; justify-content: space-between; align-items: center; text-align: left; background: #fff; border: 1px solid var(--line); padding: 16px 18px; border-radius: 14px; cursor: pointer; transition: border .2s, transform .2s, background .2s; }
 .answer-list button:hover { border-color: var(--rose); background: #fff8f7; transform: translateX(3px); }
@@ -323,8 +327,8 @@ footer .disclaimer { text-align: right; max-width: 350px; justify-self: end; }
   .connect-art { grid-row: auto; }
   .connect-actions { grid-column: 1; }
   .connect-card, .partner-card { padding: 27px; }
-  .quiz-modal, .pair-modal { padding: 34px 22px 25px; border-radius: 22px; }
-  .quiz-modal > h2, .pair-modal h2, .result-view h2 { font-size: 34px; }
+  .quiz-modal, .pair-modal, .partner-care-modal { padding: 34px 22px 25px; border-radius: 22px; }
+  .quiz-modal > h2, .pair-modal h2, .partner-care-modal h2, .result-view h2 { font-size: 34px; }
   .result-actions { flex-direction: column; }
   .modal-backdrop { padding: 12px; align-items: start; }
   .auth-page { padding: 24px 15px 45px; }
