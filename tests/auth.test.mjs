@@ -54,12 +54,14 @@ test("removes ChatGPT sign-in from application routes", async () => {
   assert.match(combined, /action="\/api\/auth\/logout"/);
 });
 
-test("adds verified weekly PAIR Notes with unsubscribe and rotation history", async () => {
-  const [schema, migration, settings, sender, card, scheduler] = await Promise.all([
+test("adds verified weekly PAIR Notes with Gmail delivery, unsubscribe, and rotation history", async () => {
+  const [schema, migration, settings, sender, delivery, environment, card, scheduler] = await Promise.all([
     read("db/schema.ts"),
     read("drizzle/0002_relatune_pair_notes.sql"),
     read("app/api/pair-notes/settings/route.ts"),
     read("app/api/pair-notes/send/route.ts"),
+    read("app/lib/email-delivery.ts"),
+    read(".env.example"),
     read("app/components/PairNotesCard.tsx"),
     read(".github/workflows/pair-notes.yml"),
   ]);
@@ -71,6 +73,11 @@ test("adds verified weekly PAIR Notes with unsubscribe and rotation history", as
   assert.match(settings, /sendVerificationEmail/);
   assert.match(sender, /selectNextPairNote/);
   assert.match(sender, /unsubscribeToken/);
+  assert.match(delivery, /oauth2\.googleapis\.com\/token/);
+  assert.match(delivery, /gmail\.googleapis\.com\/gmail\/v1\/users\/me\/messages\/send/);
+  assert.match(delivery, /GMAIL_REFRESH_TOKEN/);
+  assert.match(environment, /GMAIL_SENDER_EMAIL=relatuneconnect@gmail\.com/);
+  assert.doesNotMatch(`${delivery}\n${environment}`, /RESEND_API_KEY|api\.resend\.com/);
   assert.match(card, /PAIR Notes/);
   assert.match(card, /never shown to your partner/);
   assert.match(scheduler, /schedule:/);
