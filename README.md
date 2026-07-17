@@ -20,14 +20,16 @@ The `relatune-db` Cloudflare D1 database stores accounts, protected password rec
 
 ## Weekly PAIR Notes
 
-Weekly email delivery uses Resend and an authenticated scheduled request. Configure these hosted values before enabling real delivery:
+Weekly email delivery uses the Gmail API and an authenticated scheduled request. Relatune requests only permission to send mail from its dedicated Gmail account. Configure these hosted values before enabling real delivery:
 
-- `RESEND_API_KEY`
-- `PAIR_NOTES_FROM` using a sender on a verified domain
+- `GMAIL_CLIENT_ID`
+- `GMAIL_CLIENT_SECRET`
+- `GMAIL_REFRESH_TOKEN` created with offline access and the Gmail send-only scope
+- `GMAIL_SENDER_EMAIL` set to `relatuneconnect@gmail.com`
 - `PAIR_NOTES_CRON_SECRET`
 - `PUBLIC_SITE_URL`
 
-Add the same `PAIR_NOTES_CRON_SECRET` as a GitHub Actions repository secret. The included workflow checks every hour on Monday and sends only when each recipient reaches 8:00 AM in their selected time zone. Email addresses, verification state, opt-in state, and non-repeating tip history are stored in D1.
+Store the Google client secret, refresh token, and scheduler secret only as hosted secrets; never commit them to GitHub. Add the same `PAIR_NOTES_CRON_SECRET` as a GitHub Actions repository secret. The included workflow checks every hour on Monday and sends only when each recipient reaches 8:00 AM in their selected time zone. Email addresses, verification state, opt-in state, and non-repeating tip history are stored in D1.
 
 ## Development
 
