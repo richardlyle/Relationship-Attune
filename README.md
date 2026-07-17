@@ -4,7 +4,7 @@ Relatune is a private couples personality quiz site. Each person can create a us
 
 ## Live site
 
-https://relatune.org
+https://relatune.rjlyle00.workers.dev
 
 ## Account security
 

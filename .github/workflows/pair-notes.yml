@@ -15,7 +15,7 @@ jobs:
       - name: Ask Relatune to send due notes
         env:
           PAIR_NOTES_CRON_SECRET: ${{ secrets.PAIR_NOTES_CRON_SECRET }}
-          PAIR_NOTES_ENDPOINT: https://relatune.org/api/pair-notes/send
+          PAIR_NOTES_ENDPOINT: https://relatune.rjlyle00.workers.dev/api/pair-notes/send
         run: |
           test -n "$PAIR_NOTES_CRON_SECRET"
           body='{}'

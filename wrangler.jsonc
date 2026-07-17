@@ -13,7 +13,7 @@
     }
   ],
   "vars": {
-    "PUBLIC_SITE_URL": "https://relatune.org"
+    "PUBLIC_SITE_URL": "https://relatune.rjlyle00.workers.dev"
   },
   "observability": {
     "enabled": true
