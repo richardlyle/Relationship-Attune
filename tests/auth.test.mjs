@@ -105,7 +105,9 @@ test("opens the full partner care map from the partner card", async () => {
 
   assert.match(app, /onClick=\{\(\) => setShowPartnerCareMap\(true\)\}/);
   assert.match(app, /setShowPartnerCareMap\(true\)/);
-  assert.match(app, /Close partner care map/);
-  assert.match(app, /Ways to care for them/);
+  assert.match(app, /const partnerPossessive/);
+  assert.match(app, /See \{partnerPossessive\} care map/);
+  assert.match(app, /Ways to care for \{partnerName\}/);
+  assert.match(app, /partner-seal/);
   assert.match(app, /partnerInsight\.care\.map/);
 });
