@@ -1,8 +1,9 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { ChatGPTUser } from "../chatgpt-auth";
+import type { AuthUser } from "../auth";
 import { quizzes, type Quiz, type ResultProfile } from "../lib/quizzes";
+import PairNotesCard from "./PairNotesCard";
 
 type SavedResult = {
   quizSlug: string;
@@ -42,7 +43,7 @@ const demoPartnerResult: SavedResult = {
   ownerName: "Your partner",
 };
 
-export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) {
+export default function RelationshipApp({ user }: { user: AuthUser | null }) {
   const [activeQuiz, setActiveQuiz] = useState<Quiz | null>(null);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -134,7 +135,7 @@ export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) 
   async function createPair() {
     if (!user) {
       setCouple({ inviteCode: "US2DAY", partnerName: null, partnerResults: [] });
-      setPairMessage("Demo code created. Sign in to create a real private space.");
+      setPairMessage("Demo code created. Create an account to make a real private space.");
       return;
     }
     setLoadingPair(true);
@@ -163,7 +164,7 @@ export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) 
     }
     if (!user) {
       setCouple({ inviteCode: joinCode.toUpperCase(), partnerName: "Your partner", partnerResults: [demoPartnerResult] });
-      setPairMessage("Demo space connected. Sign in to save this pairing.");
+      setPairMessage("Demo space connected. Create an account to save this pairing.");
       return;
     }
     setLoadingPair(true);
@@ -188,24 +189,25 @@ export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) 
   return (
     <main>
       <nav className="topbar" aria-label="Primary navigation">
-        <a className="brand" href="#top" aria-label="Between Us home">
-          <span className="brand-mark">B</span>
-          <span>Between Us</span>
+        <a className="brand" href="#top" aria-label="Relatune home">
+          <span className="brand-mark">R</span>
+          <span>Relatune</span>
         </a>
         <div className="nav-links">
           <a href="#quizzes">Quizzes</a>
           <a href="#together">Together</a>
           <a href="#care-map">Care map</a>
+          <a href="#pair-notes">PAIR Notes</a>
         </div>
         <div className="account-area">
           {user ? (
             <>
               <span className="avatar">{displayName.slice(0, 1).toUpperCase()}</span>
               <span className="account-name">{displayName}</span>
-              <a className="text-link" href="/signout-with-chatgpt?return_to=%2F">Sign out</a>
+              <form action="/api/auth/logout" method="post"><button className="text-link signout-button" type="submit">Sign out</button></form>
             </>
           ) : (
-            <a className="small-button" href="/signin-with-chatgpt?return_to=%2F">Sign in</a>
+            <a className="small-button" href="/login">Sign in</a>
           )}
         </div>
       </nav>
@@ -222,7 +224,7 @@ export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) 
           <div className="trust-row" aria-label="Site benefits">
             <span><b>6</b> free frameworks</span>
             <span><b>4–8</b> minutes each</span>
-            <span><b>2</b> private profiles</span>
+            <span><b>1</b> weekly PAIR Note</span>
           </div>
         </div>
 
@@ -311,6 +313,8 @@ export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) 
         </article>
       </section>
 
+      <PairNotesCard signedIn={Boolean(user)} partnerName={couple?.partnerName ?? null} partnerHasResults={Boolean(partnerInsight)} />
+
       <section className="together-section" id="together">
         <div className="together-heading">
           <p className="section-kicker">Better together</p>
@@ -351,7 +355,7 @@ export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) 
       </section>
 
       <footer>
-        <a className="brand" href="#top"><span className="brand-mark">B</span><span>Between Us</span></a>
+        <a className="brand" href="#top"><span className="brand-mark">R</span><span>Relatune</span></a>
         <p>Made for curiosity, care, and kinder conversations.</p>
         <p className="disclaimer">Original educational reflections; not affiliated with official assessment publishers and not a diagnosis.</p>
       </footer>
@@ -387,7 +391,7 @@ export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) 
                 <div className="watch-for"><b>A gentle watch-out</b>{result.profile.watchFor}</div>
                 {!user && <p className="save-prompt">Sign in to save this result and share it with your partner.</p>}
                 <div className="result-actions">
-                  {!user && <a className="primary-button" href="/signin-with-chatgpt?return_to=%2F">Sign in to save</a>}
+                  {!user && <a className="primary-button" href="/login">Sign in to save</a>}
                   <button className="outline-button" onClick={() => setActiveQuiz(null)}>Back to dashboard</button>
                 </div>
               </div>
@@ -411,7 +415,7 @@ export default function RelationshipApp({ user }: { user: ChatGPTUser | null }) 
               {loadingPair ? "Connecting…" : pairMode === "create" ? "Create code" : "Connect profiles"}
             </button>
             {pairMessage && <p className="pair-message">{pairMessage}</p>}
-            {!user && <p className="save-prompt">This is a preview. <a href="/signin-with-chatgpt?return_to=%2F">Sign in</a> to create a real saved space.</p>}
+            {!user && <p className="save-prompt">This is a preview. <a href="/login">Sign in</a> to create a real saved space.</p>}
           </div>
         </div>
       )}

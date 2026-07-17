@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "relatune",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-07-16",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "relatune-db",
+      "database_id": "b82cc7d0-5966-4b92-a853-d726d1ea079c",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "vars": {
+    "PUBLIC_SITE_URL": "https://relatune.org"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

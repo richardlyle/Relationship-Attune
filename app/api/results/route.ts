@@ -1,13 +1,13 @@
-﻿import { getDb } from "../../../db";
+import { getDb } from "../../../db";
 import { quizResults } from "../../../db/schema";
-import { getChatGPTUser } from "../../chatgpt-auth";
+import { getCurrentUser } from "../../auth";
 import { ensureProfile } from "../../lib/dashboard-data";
 import { getQuiz } from "../../lib/quizzes";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return Response.json({ error: "Sign in required." }, { status: 401 });
 
   try {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const completedAt = new Date().toISOString();
     const values = {
       id: crypto.randomUUID(),
-      ownerEmail: user.email,
+      ownerEmail: user.id,
       quizSlug: quiz.slug,
       primaryType: payload.primaryType,
       quizTitle: quiz.title,

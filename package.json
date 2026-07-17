@@ -9,9 +9,12 @@
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
     "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "node --test --test-isolation=none tests/auth.test.mjs",
+    "check": "npm run build && npm test",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:remote": "wrangler d1 migrations apply relatune-db --remote",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

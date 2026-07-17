@@ -1,0 +1,28 @@
+name: Send weekly PAIR Notes
+
+on:
+  schedule:
+    - cron: "0 * * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask Relatune to send due notes
+        env:
+          PAIR_NOTES_CRON_SECRET: ${{ secrets.PAIR_NOTES_CRON_SECRET }}
+          PAIR_NOTES_ENDPOINT: https://relatune.org/api/pair-notes/send
+        run: |
+          test -n "$PAIR_NOTES_CRON_SECRET"
+          body='{}'
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then body='{"force":true}'; fi
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $PAIR_NOTES_CRON_SECRET" \
+            --header "Content-Type: application/json" \
+            --data "$body" \
+            "$PAIR_NOTES_ENDPOINT"

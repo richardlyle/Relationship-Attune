@@ -8,6 +8,20 @@
       "when": 1784260918258,
       "tag": "0000_between_us",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1784300633709,
+      "tag": "0001_local_accounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1784313913236,
+      "tag": "0002_relatune_pair_notes",
+      "breakpoints": true
     }
   ]
 }

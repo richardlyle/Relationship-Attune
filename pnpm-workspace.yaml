@@ -1,0 +1,7 @@
+trustLockfile: true
+allowBuilds:
+  esbuild: true
+  fsevents: false
+  sharp: true
+  unrs-resolver: true
+  workerd: true

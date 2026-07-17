@@ -1,13 +1,13 @@
-﻿import { eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { couples, profiles } from "../../../db/schema";
-import { getChatGPTUser } from "../../chatgpt-auth";
+import { getCurrentUser } from "../../auth";
 import { ensureProfile, getDashboard, makeInviteCode } from "../../lib/dashboard-data";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return Response.json({ error: "Sign in required." }, { status: 401 });
 
   try {
@@ -23,8 +23,8 @@ export async function POST(request: Request) {
         const inviteCode = makeInviteCode();
         const coupleId = crypto.randomUUID();
         try {
-          await db.insert(couples).values({ id: coupleId, inviteCode, createdByEmail: user.email });
-          await db.update(profiles).set({ coupleId, updatedAt: new Date().toISOString() }).where(eq(profiles.email, user.email));
+          await db.insert(couples).values({ id: coupleId, inviteCode, createdByEmail: user.id });
+          await db.update(profiles).set({ coupleId, updatedAt: new Date().toISOString() }).where(eq(profiles.email, user.id));
           created = true;
         } catch (error) {
           if (attempt === 2) throw error;
@@ -44,10 +44,10 @@ export async function POST(request: Request) {
         return Response.json({ error: "Your profile is already connected to another shared space." }, { status: 409 });
       }
       const members = await db.select({ email: profiles.email }).from(profiles).where(eq(profiles.coupleId, couple.id)).limit(3);
-      if (!members.some((member) => member.email === user.email) && members.length >= 2) {
+      if (!members.some((member) => member.email === user.id) && members.length >= 2) {
         return Response.json({ error: "That shared space already has two people." }, { status: 409 });
       }
-      await db.update(profiles).set({ coupleId: couple.id, updatedAt: new Date().toISOString() }).where(eq(profiles.email, user.email));
+      await db.update(profiles).set({ coupleId: couple.id, updatedAt: new Date().toISOString() }).where(eq(profiles.email, user.id));
       return Response.json({ couple: (await getDashboard(user)).couple });
     }
 

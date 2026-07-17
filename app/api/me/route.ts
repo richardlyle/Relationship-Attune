@@ -1,10 +1,10 @@
-﻿import { getChatGPTUser } from "../../chatgpt-auth";
+import { getCurrentUser } from "../../auth";
 import { getDashboard } from "../../lib/dashboard-data";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   if (!user) return Response.json({ error: "Sign in required." }, { status: 401 });
   try {
     return Response.json(await getDashboard(user));

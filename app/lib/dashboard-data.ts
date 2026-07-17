@@ -1,19 +1,19 @@
-﻿import { and, desc, eq, ne } from "drizzle-orm";
+import { and, desc, eq, ne } from "drizzle-orm";
 import { getDb } from "../../db";
-import { couples, profiles, quizResults } from "../../db/schema";
-import type { ChatGPTUser } from "../chatgpt-auth";
+import { accounts, couples, profiles, quizResults } from "../../db/schema";
+import type { AuthUser } from "../auth";
 
-export async function ensureProfile(user: ChatGPTUser) {
+export async function ensureProfile(user: AuthUser) {
   const db = getDb();
   await db.insert(profiles).values({
-    email: user.email,
+    email: user.id,
     displayName: user.displayName,
     updatedAt: new Date().toISOString(),
   }).onConflictDoUpdate({
     target: profiles.email,
     set: { displayName: user.displayName, updatedAt: new Date().toISOString() },
   });
-  const [profile] = await db.select().from(profiles).where(eq(profiles.email, user.email)).limit(1);
+  const [profile] = await db.select().from(profiles).where(eq(profiles.email, user.id)).limit(1);
   return profile;
 }
 
@@ -37,18 +37,25 @@ function toSavedResult(row: typeof quizResults.$inferSelect, ownerName?: string)
   };
 }
 
-export async function getDashboard(user: ChatGPTUser) {
+export async function getDashboard(user: AuthUser) {
   const db = getDb();
   const profile = await ensureProfile(user);
   const ownRows = await db.select().from(quizResults)
-    .where(eq(quizResults.ownerEmail, user.email))
+    .where(eq(quizResults.ownerEmail, user.id))
     .orderBy(desc(quizResults.completedAt));
+  const [account] = await db.select({
+    email: accounts.email,
+    emailVerifiedAt: accounts.emailVerifiedAt,
+    weeklyEmailEnabled: accounts.weeklyEmailEnabled,
+    emailTimezone: accounts.emailTimezone,
+  }).from(accounts).where(eq(accounts.id, user.id)).limit(1);
+
 
   let couple = null;
   if (profile.coupleId) {
     const [coupleRow] = await db.select().from(couples).where(eq(couples.id, profile.coupleId)).limit(1);
     const [partner] = await db.select().from(profiles)
-      .where(and(eq(profiles.coupleId, profile.coupleId), ne(profiles.email, user.email)))
+      .where(and(eq(profiles.coupleId, profile.coupleId), ne(profiles.email, user.id)))
       .limit(1);
     const partnerRows = partner
       ? await db.select().from(quizResults)
@@ -66,6 +73,13 @@ export async function getDashboard(user: ChatGPTUser) {
     displayName: profile.displayName,
     couple,
     results: ownRows.map((row) => toSavedResult(row, profile.displayName)),
+    pairNotes: {
+      email: account?.email ?? null,
+      emailVerified: Boolean(account?.emailVerifiedAt),
+      weeklyEmailEnabled: Boolean(account?.weeklyEmailEnabled),
+      emailTimezone: account?.emailTimezone ?? "America/New_York",
+      active: Boolean(account?.email && account?.emailVerifiedAt && account?.weeklyEmailEnabled),
+    },
   };
 }
 

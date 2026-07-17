@@ -1,15 +1,15 @@
-﻿import type { Metadata } from "next";
-import { getChatGPTUser } from "./chatgpt-auth";
+import type { Metadata } from "next";
+import { getCurrentUser } from "./auth";
 import RelationshipApp from "./components/RelationshipApp";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Between Us — Personality quizzes for couples",
-  description: "A private two-person space for thoughtful quizzes, shared results, and practical ways to care for each other.",
+  title: "Relatune — Personality-aware care for couples",
+  description: "A private space for thoughtful quizzes, shared care maps, and personalized weekly PAIR Notes.",
 };
 
 export default async function Home() {
-  const user = await getChatGPTUser();
+  const user = await getCurrentUser();
   return <RelationshipApp user={user} />;
 }
